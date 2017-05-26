@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<!-- 加载spring容器（通配符方式） -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/spring/applicationContext-*.xml</param-value>
+	</context-param>
+	<listener> <!-- spring核心监听器 -->
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+
+	<!-- 配置前端控制器 -->
+	<servlet>
+		<servlet-name>springmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<!-- 指定springmvc配置的还在位置 -->
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/springmvc.xml</param-value>
+		</init-param>
+		<!-- servlet随服务器启动 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springmvc</servlet-name>
+		<url-pattern>*.action</url-pattern>
+	</servlet-mapping>
+	<!-- 处理乱码的过滤器 -->
+	<filter>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+<!-- 
+  <servlet>
+		<servlet-name>springmvc_rest</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		contextConfigLocation配置springmvc加载配置文件 （配置处理器映射器，适配器等等）
+			如果不配置，默认加载的是/WEB-INF/servlet名称-servlet.xml（springmvc-servlet.xml）		
+		
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/springmvc.xml</param-value>
+		</init-param>
+		岁服务器启动而启动
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springmvc_rest</servlet-name>
+		两种配置方式 ：1.*.action，访问以action结尾由Dispatcher进行解析 
+						  2. /，所有访问地址都有DispatcherServlet进行解析，对于静态文件的解析需要配置不让dispatcher进行解析
+		因为使用此种方式可以实现RESTful风格
+						  3./*,这样配置不对，使用这样配置，最终转发到jsp页面时，仍然会由DispatcherServlet解析jsp，不能根据jsp页面找到handler，会报错
+						  
+		
+		<url-pattern>/</url-pattern>
+	</servlet-mapping> -->
+	
+	
+	
+
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>

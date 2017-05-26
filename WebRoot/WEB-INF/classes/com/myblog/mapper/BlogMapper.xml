@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myblog.mapper.BlogMapper">
+  <select id="findAllBlogs"   resultType="com.myblog.po.Blog">
+  	SELECT * FROM blogs
+  </select>
+   <select id="findBlogByTid"  parameterType="int"  resultType="com.myblog.po.Blog">
+  	SELECT * FROM blogs where bid=#{value} order by create_time desc 
+  </select>
+  
+  <select id="findRecentBlogs"   resultType="com.myblog.po.Blog">
+  	SELECT * FROM blogs ORDER BY create_time DESC limit 0, 5 
+  </select>
+  
+	<select id="findLastdBlog" parameterType="int" resultType="blog">
+  	SELECT * FROM blogs WHERE bid &lt; #{value} limit 0,1;
+  	</select>
+  
+  	<select id="findNextdBlog" parameterType="int" resultType="blog">
+  	SELECT * FROM blogs WHERE bid &gt; #{value} limit 0,1;
+  	</select>
+  
+  <select id="findLabels" resultType="String">
+  	SELECT label FROM blogs GROUP BY label
+  </select>
+  
+  <!-- 添加博客 -->
+  <insert id="insertBlog" parameterType="com.myblog.po.BlogCustom">
+  INSERT INTO blogs(title,label,user_id,author,content) values(#{title},#{label},#{uid},#{author},#{content});
+  </insert>
+  
+  <!-- 根据标题查询 -->
+  <select id="findBlogsByTitle" parameterType="String" resultType="com.myblog.po.Blog">
+  	SELECT * FROM blogs	 WHERE 	title like '%${value}%'
+  </select>
+  
+  <!-- 根据label查询 -->
+  <select id="findBlogsByLabel" parameterType="String" resultType="com.myblog.po.Blog">
+  	SELECT * FROM blogs WHERE label = #{value}
+  </select>
+  
+  <!-- 更新博客 -->
+  <update id="updateBlog" parameterType="com.myblog.po.Blog">
+  	UPDATE blogs SET title = #{title} ,label=#{label},content=#{content} where bid=#{bid}
+  </update>
+  
+  <!-- 删除博客 -->
+  <delete id="deleteBlog" parameterType="int" >
+  	DELETE FROM blogs WHERE bid = #{value}
+  </delete>
+</mapper>
